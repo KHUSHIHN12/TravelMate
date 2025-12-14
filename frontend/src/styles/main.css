@@ -1,0 +1,195 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  .navbar-logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-item {
+    padding: 8px 16px;
+    color: white;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-item:hover {
+    background-color:#57564F;
+    transform: translateY(-2px);
+  }
+  
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .home-bg {
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  /* Dark layer to make text readable */
+  .home-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .home-overlay {
+    position: relative;
+    text-align: center;
+    color: white;
+    max-width: 700px;
+    padding: 20px;
+  }
+  
+  .home-overlay h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+  
+  .home-overlay p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    line-height: 1.6;
+  }
+  
+  .home-overlay button {
+    padding: 12px 30px;
+    font-size: 1rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .home-overlay button:hover {
+    background: #1e40af;
+  }
+  
+  
+  /* Containers */
+  .container {
+    padding: 40px;
+    max-width: 1100px;
+    margin: auto;
+  }
+  
+  /* Card */
+  .card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .card select, .card button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+  }
+  
+  .card button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin-top: 20px;
+  }
+  
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Destination card */
+  .destination-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  /* HERO TEXT ANIMATION */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-overlay h1,
+.home-overlay p,
+.home-overlay button {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.home-overlay h1 {
+  animation-delay: 0.1s;
+}
+
+.home-overlay p {
+  animation-delay: 0.3s;
+}
+
+.home-overlay button {
+  animation-delay: 0.5s;
+}
+
+/* CARD ANIMATION */
+.card {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Stagger multiple cards if in grid */
+.grid .card:nth-child(1) { animation-delay: 0.1s; }
+.grid .card:nth-child(2) { animation-delay: 0.2s; }
+.grid .card:nth-child(3) { animation-delay: 0.3s; }
+.grid .card:nth-child(4) { animation-delay: 0.4s; }
+.grid .card:nth-child(5) { animation-delay: 0.5s; }
+.grid .card:nth-child(6) { animation-delay: 0.6s; }
+
+
