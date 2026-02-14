@@ -1,70 +1,273 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+# 🌍 TravelMate – Smart Travel Recommendation System
 
-In the project directory, you can run:
+TravelMate is an intelligent travel planning system that not only recommends destinations based on user preferences but also performs **trip optimization analysis** to identify what is limiting better travel options.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🎯 Smart Destination Recommendation
 
-### `npm test`
+* Suggests the best destination based on:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  * Climate preference
+  * Budget range
+  * Trip duration
+  * Preferred activities
+* Uses a weighted scoring system (Score out of 100).
 
-### `npm run build`
+### 📊 Trip Optimization Report (Unique Feature)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Unlike traditional travel websites, TravelMate tells users:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* What is limiting their trip
+* Which preference is acting as a bottleneck
+* How relaxing constraints improves results
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Example:
 
-### `npm run eject`
+```
+💰 Budget Impact: 25%
+⏳ Duration Impact: 0%
+🌤 Climate Impact: 0%
+🎯 Activity Impact: 10%
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+✨ Your trip quality is mainly limited by Budget.
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### ⭐ Wanderlist (Wishlist)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* Save recommended destinations
+* Remove saved destinations
+* Persistent during session
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 🔐 Authentication (Basic)
 
-## Learn More
+* Sign In functionality
+* Username stored in localStorage
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# 🏗️ Tech Stack
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Frontend
 
-### Code Splitting
+* React.js
+* Axios
+* CSS (Glassmorphism UI)
+* React Router
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Backend
 
-### Analyzing the Bundle Size
+* Node.js
+* Express.js
+* MongoDB Atlas
+* Mongoose
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Architecture
 
-### Making a Progressive Web App
+```
+Frontend (React)
+        ↓
+Express API
+        ↓
+MongoDB Atlas
+        ↓
+Scoring + Sensitivity Engine
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+# 🧠 Scoring Logic
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Each destination is scored out of **100**:
 
-### Deployment
+| Criteria       | Weight |
+| -------------- | ------ |
+| Climate Match  | 25     |
+| Budget Match   | 25     |
+| Duration Match | 25     |
+| Activity Match | 25     |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Example:
 
-### `npm run build` fails to minify
+If only climate matches → Score = 25
+If climate + budget match → Score = 50
+If all match → Score = 100
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+# 📈 Sensitivity Analysis Logic
+
+The system:
+
+1. Calculates base score
+2. Relaxes each constraint individually:
+
+   * Budget +2000
+   * Duration +1 day
+   * Climate relaxed
+   * Activity relaxed
+3. Recalculates best score
+4. Computes % improvement
+
+This identifies the **primary bottleneck**.
+
+---
+
+# 📂 Project Structure
+
+```
+TravelMate/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── styles/
+│   │   └── assets/
+│   └── package.json
+│
+├── backend/
+│   ├── config/
+│   │   └── db.js
+│   ├── models/
+│   │   └── Destination.js
+│   ├── routes/
+│   │   └── recommendRoutes.js
+│   ├── controllers/
+│   │   └── recommendController.js
+│   ├── services/
+│   │   └── scoringService.js
+│   ├── .env
+│   ├── server.js
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+# ⚙️ Installation & Setup
+
+## 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/TravelMate.git
+cd TravelMate
+```
+
+---
+
+## 2️⃣ Backend Setup
+
+```bash
+cd backend
+npm install
+```
+
+Create `.env` file:
+
+```
+MONGO_URI=your_mongodb_atlas_connection_string
+```
+
+Start backend:
+
+```bash
+node server.js
+```
+
+Expected Output:
+
+```
+Server running on port 5000
+MongoDB Atlas Connected
+```
+
+---
+
+## 3️⃣ Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Runs at:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 🌐 API Documentation
+
+## POST `/api/recommend`
+
+### Request Body
+
+```json
+{
+  "climate": "Warm",
+  "budget": 8000,
+  "duration": 5,
+  "activity": "Beach"
+}
+```
+
+### Response
+
+```json
+{
+  "bestDestination": { ... },
+  "baseScore": 75,
+  "analysis": {
+    "budget": 25,
+    "duration": 0,
+    "climate": 0,
+    "activity": 10
+  },
+  "mainBottleneck": "budget",
+  "explanation": "Your trip quality is mainly limited by budget."
+}
+```
+
+---
+
+
+
+---
+
+# 🐳 Future Enhancements
+
+* Dockerization
+* CI/CD Pipeline
+* JWT Authentication
+* User Accounts with Saved Trips
+* Machine Learning Based Recommendation
+* Dynamic Weather API Integration
+* Payment Integration
+* Admin Dashboard
+
+---
+
+# 💡 What Makes This Project Unique?
+
+Most travel websites:
+
+* Only show results
+* Or say "No Results Found"
+
+TravelMate:
+
+* Identifies bottlenecks
+* Explains how to improve trip quality
+* Provides decision intelligence
+
+
+---
