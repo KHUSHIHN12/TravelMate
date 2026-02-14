@@ -2,39 +2,16 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import bgImage from "../assets/india.jpg";
 import "../styles/recommendation.css";
+import axios from "axios";
+
 
 function Destinations() {
   const [wishlist, setWishlist] = useState([]); // Track wishlist
   const [recommendations, setRecommendations] = useState([]); // Recommended destinations
+  const [analysis, setAnalysis] = useState(null);
 
   // Full destination objects (demo)
-  const allDestinations = [
-    {
-      name: "Goa",
-      image: "https://example.com/goa.jpg",
-      description: "Famous for beaches, nightlife and Portuguese culture.",
-    },
-    {
-      name: "Manali",
-      image: "https://example.com/manali.jpg",
-      description: "A scenic hill station with snow and adventure sports.",
-    },
-    {
-      name: "Jaipur",
-      image: "https://example.com/jaipur.jpg",
-      description: "The Pink City known for forts and royal heritage.",
-    },
-    {
-      name: "Kerala",
-      image: "https://example.com/kerala.jpg",
-      description: "God’s Own Country with backwaters and greenery.",
-    },
-    {
-      name: "Ladakh",
-      image: "https://example.com/ladakh.jpg",
-      description: "High altitude desert with stunning landscapes.",
-    },
-  ];
+  
 
   // State to track form selections
   const [formValues, setFormValues] = useState({
@@ -51,12 +28,27 @@ function Destinations() {
   };
 
   // Generate recommendations only after button click
-  const getRecommendations = () => {
-    // For demo: we just shuffle allDestinations
-    // Later: filter based on formValues
-    const shuffled = [...allDestinations].sort(() => 0.5 - Math.random());
-    setRecommendations(shuffled.slice(0, 3));
-  };
+  //import axios from "axios";
+
+const getRecommendations = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/recommend",
+      {
+        climate: formValues.climate,
+        budget: Number(formValues.budget),
+        duration: Number(formValues.duration),
+        activity: formValues.activities,
+      }
+    );
+
+    setRecommendations([response.data.bestDestination]);
+    setAnalysis(response.data.analysis);
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
   // Add to wishlist
   const addToWishlist = (place) => {
@@ -129,45 +121,34 @@ function Destinations() {
           {/* Form */}
           <div className="form-group">
             <label>Climate</label>
-            <select
-              name="climate"
-              value={formValues.climate}
-              onChange={handleChange}
-            >
-              <option value="">Select Climate</option>
-              <option>🌿 Monsoon Escape</option>
-              <option>🌤️ Mild & Pleasant</option>
-              <option>☀️ Warm & Sunny</option>
-              <option>❄️ Cool & Mountain</option>
-            </select>
-          </div>
+            <select name="climate" value={formValues.climate} onChange={handleChange}>
+  <option value="">Select Climate</option>
+  <option value="Monsoon">Monsoon Escape</option>
+  <option value="Moderate">Mild & Pleasant</option>
+  <option value="Warm">Warm & Sunny</option>
+  <option value="Cold">Cool & Mountain</option>
+</select>
+</div>
 
           <div className="form-group">
             <label>Budget</label>
-            <select
-              name="budget"
-              value={formValues.budget}
-              onChange={handleChange}
-            >
-              <option value="">Select Budget</option>
-              <option>💸 Budget-Friendly</option>
-              <option>💼 Comfortable</option>
-              <option>✨ Premium</option>
-            </select>
+            <select name="budget" value={formValues.budget} onChange={handleChange}>
+  <option value="">Select Budget</option>
+  <option value="6000">Budget-Friendly</option>
+  <option value="12000">Comfortable</option>
+  <option value="20000">Premium</option>
+</select>
           </div>
 
           <div className="form-group">
             <label>Duration</label>
-            <select
-              name="duration"
-              value={formValues.duration}
-              onChange={handleChange}
-            >
-              <option value="">Select Duration</option>
-              <option>Weekend</option>
-              <option>3–7 days</option>
-              <option>Long stay</option>
-            </select>
+            <select name="duration" value={formValues.duration} onChange={handleChange}>
+  <option value="">Select Duration</option>
+  <option value="2">Weekend</option>
+  <option value="5">3–7 days</option>
+  <option value="10">Long stay</option>
+</select>
+
           </div>
 
           <div className="form-group">
@@ -190,31 +171,50 @@ function Destinations() {
           </button>
 
           {/* Only show recommendations after button click */}
-          {recommendations.length > 0 && (
-            <div className="recommendations-section">
-              <h3>Recommended Destinations:</h3>
-              {recommendations.map((place) => (
-                <div key={place.name} className="destination-card">
-                  <img
-                    src={place.image}
-                    alt={place.name}
-                    className="dest-image"
-                  />
-                  <h4>{place.name}</h4>
-                  <p>{place.description}</p>
-                  <button
-                    className="recommend-btn"
-                    onClick={() => addToWishlist(place)}
-                    disabled={wishlist.find((item) => item.name === place.name)}
-                  >
-                    {wishlist.find((item) => item.name === place.name)
-                      ? "Added to Wanderlist"
-                      : "Add to Wanderlist"}
-                  </button>
-                </div>
-              ))}
+              
+         {/* Recommended Destination */}
+         {recommendations.length > 0 && (
+  <div className="recommendations-section">
+    <h3>Recommended Destination:</h3>
+
+    {recommendations.map((place) => (
+      <div key={place._id} className="destination-card">
+
+        <img
+          src={place.image || "https://via.placeholder.com/600x350"}
+          alt={place.name}
+          className="dest-image"
+        />
+
+        <h2 className="dest-name">{place.name}</h2>
+
+        <p className="dest-description">{place.description}</p>
+
+        <button
+          className="recommend-btn"
+          onClick={() => addToWishlist(place)}
+        >
+          Add to Wanderlist
+        </button>
+
+      </div>
+    ))}
+  </div>
+)}
+
+ 
+  
+          {/* Optimization Report */}
+          {analysis && (
+            <div className="optimization-report">
+              <h3>Trip Optimization Report</h3>
+              <p>💰 Budget Impact: {analysis.budget}%</p>
+              <p>⏳ Duration Impact: {analysis.duration}%</p>
+              <p>🌤 Climate Impact: {analysis.climate}%</p>
+              <p>🎯 Activity Impact: {analysis.activity}%</p>
             </div>
           )}
+
 
           <p className="form-footer">
             ✨ Save your favorite destinations to your Wanderlist
